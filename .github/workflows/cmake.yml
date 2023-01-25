@@ -26,7 +26,7 @@ jobs:
       run: git submodule update --init --recursive
     
     - name: Setup Ubuntu
-      run: apt-get install -y libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev
+      run: sudo apt-get install -y libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev
       if: matrix.os == 'ubuntu-latest'
 
     - name: Configure CMake
