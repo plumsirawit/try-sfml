@@ -5,6 +5,7 @@ add_library(HelloWorld STATIC
 target_include_directories(HelloWorld PUBLIC
     "./")
 
+add_compile_definitions(CMAKE_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 add_executable(Main "main.cpp")
 add_executable(ClickerGame "clicker.cpp" "clicker.hpp")
 find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)

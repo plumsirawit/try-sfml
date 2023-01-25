@@ -1,11 +1,28 @@
 #include "clicker.hpp"
 
+const int WINDOW_WIDTH = 640;
+const int WINDOW_HEIGHT = 480;
+const int RADIUS = 40;
+
 ClickerGame::ClickerGame()
-    : mWindow(sf::VideoMode(640, 480), "SFML ClickerGame Application"),
+    : mWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
+              "SFML ClickerGame Application"),
       mPlayer(), mouseX(0), mouseY(0), score(0) {
-  mPlayer.setRadius(40.f);
+  std::string fontPath = (std::filesystem::path(CMAKE_SOURCE_DIR) / "assets" /
+                          "Inconsolata-Regular.ttf")
+                             .string();
+  if (!font.loadFromFile(fontPath)) {
+    throw "Font not found!";
+  }
+  mPlayer.setRadius(RADIUS);
   mPlayer.setPosition(100.f, 100.f);
   mPlayer.setFillColor(sf::Color::Cyan);
+  scoreLabel.setFont(font);
+  scoreLabel.setString("Score: 0");
+  scoreLabel.setCharacterSize(24);
+  scoreLabel.setFillColor(sf::Color::Red);
+  scoreLabel.setStyle(sf::Text::Regular);
+  scoreLabel.setPosition(10.f, 10.f);
 }
 void ClickerGame::run() {
   while (mWindow.isOpen()) {
@@ -31,13 +48,13 @@ void ClickerGame::processEvents() {
       mouseY = event.mouseMove.y;
     } else if (event.type == sf::Event::MouseButtonPressed) {
       float distsq =
-          distSQ(mPlayer.getPosition() +
-                     sf::Vector2f({mPlayer.getRadius(), mPlayer.getRadius()}),
+          distSQ(mPlayer.getPosition() + sf::Vector2f({RADIUS, RADIUS}),
                  {(float)mouseX, (float)mouseY});
-      if (distsq <= mPlayer.getRadius() * mPlayer.getRadius()) {
+      if (distsq <= RADIUS * RADIUS) {
         score++;
-        mPlayer.setPosition(rand() % 640, rand() % 480);
-        std::cerr << "Score: " << score << std::endl;
+        mPlayer.setPosition(rand() % (WINDOW_WIDTH - 2 * RADIUS),
+                            rand() % (WINDOW_HEIGHT - 2 * RADIUS));
+        scoreLabel.setString("Score: " + std::to_string(score));
       }
     }
   }
@@ -46,6 +63,7 @@ void ClickerGame::update() {}
 void ClickerGame::render() {
   mWindow.clear();
   mWindow.draw(mPlayer);
+  mWindow.draw(scoreLabel);
   mWindow.display();
 }
 

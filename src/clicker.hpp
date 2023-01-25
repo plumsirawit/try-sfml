@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <filesystem>
 #include <iostream>
 
 class ClickerGame {
@@ -15,6 +16,8 @@ private:
 
   sf::RenderWindow mWindow;
   sf::CircleShape mPlayer;
+  sf::Text scoreLabel;
+  sf::Font font;
   int mouseX, mouseY;
   int score;
 };
